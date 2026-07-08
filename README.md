@@ -44,6 +44,7 @@ Opencode commands that let you explicitly invoke skills with `/command` in the T
 
 | Command | Skill | What it does |
 |---------|-------|--------------|
+| `/commit` | commit | Analyse staged or unstaged changes, draft conventional commit message(s), and create the commit after user confirmation |
 | `/grill-with-docs` | grill-with-docs | Interview you relentlessly about a plan, sharpening terminology and updating `CONTEXT.md`/ADRs inline as decisions crystallise |
 | `/implement` | implement | Execute the work described in a spec or set of tickets, using /tdd at pre-agreed seams, then review and commit |
 | `/setup-skills` | setup-skills | Configure a repo for the engineering skills: discover and record the issue tracker root, triage label vocabulary, and domain-doc layout |
