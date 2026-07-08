@@ -1,39 +1,23 @@
 ---
-name: grill-with-docs
-description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.
+name: domain-modeling
+description: Build and sharpen a project's domain model. Use when the user wants to pin down domain terminology or a ubiquitous language, record an architectural decision, or when another skill needs to maintain the domain model.
 ---
 
-<what-to-do>
+# Domain Modeling
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Actively build and sharpen the project's domain model as you design. This is the *active* discipline — challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `CONTEXT.md` for vocabulary is not this skill — that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
 
-Ask the questions one at a time, waiting for feedback on each question before continuing.
-
-If a question can be answered by exploring the codebase, explore the codebase instead.
-
-</what-to-do>
-
-<supporting-info>
-
-## Domain awareness
-
-During codebase exploration, also look for existing documentation. The
-locations of `CONTEXT.md` and the ADR directory come from your repo's skills
-config — `<docs-root>/agents/project-structure.md` points at `agents/domain.md`,
-which records the discovered paths. If that config is missing, run
-`/setup-skills`. Use those configured locations wherever the layouts below show
-a `<context-file>` or `<adr-dir>/` placeholder:
-
-### File structure
+## File structure
 
 Most repos have a single context:
 
 ```
 /
-├── <context-file>            ← e.g. CONTEXT.md
-├── <adr-dir>/                ← e.g. docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
+├── CONTEXT.md
+├── docs/
+│   └── adr/
+│       ├── 0001-event-sourced-orders.md
+│       └── 0002-postgres-for-write-model.md
 └── src/
 ```
 
@@ -42,17 +26,18 @@ If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The ma
 ```
 /
 ├── CONTEXT-MAP.md
-├── <adr-dir>/                        ← system-wide decisions
+├── docs/
+│   └── adr/                          ← system-wide decisions
 ├── src/
 │   ├── ordering/
 │   │   ├── CONTEXT.md
-│   │   └── <adr-dir>/                ← context-specific decisions
+│   │   └── docs/adr/                 ← context-specific decisions
 │   └── billing/
 │       ├── CONTEXT.md
-│       └── <adr-dir>/
+│       └── docs/adr/
 ```
 
-Create files lazily — only when you have something to write — at the locations your domain-doc config defines. If no `CONTEXT.md` exists, create one when the first term is resolved. If no ADR directory exists, create it when the first ADR is needed.
+Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
 
 ## During the session
 
@@ -87,5 +72,3 @@ Only offer to create an ADR when all three are true:
 3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
 
 If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
-
-</supporting-info>

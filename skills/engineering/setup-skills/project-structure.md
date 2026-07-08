@@ -17,7 +17,7 @@ lives under `<docs-root>/agents/`.
 
 - **Domain docs** — `<one-line summary: where CONTEXT.md and ADRs live>`.
   See [domain.md](./domain.md).
-- **Issue tracker** — issues are local markdown files under `.scratch/<feature>/`.
+- **Issue tracker** — issues and specs are local markdown files under `<issue-tracker-root>/<feature>/`.
   See [issue-tracker.md](./issue-tracker.md).
 - **Triage labels** — `<one-line summary of the label vocabulary>`.
   See [triage-labels.md](./triage-labels.md).
