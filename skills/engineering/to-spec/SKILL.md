@@ -16,7 +16,9 @@ The issue tracker and triage label vocabulary should have been provided to you �
 
 Check with the user that these seams match their expectations.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Under the local-markdown tracker convention, pick a short kebab-case feature slug and write the spec to `.scratch/<feature-slug>/SPEC.md`, creating the `.scratch/<feature-slug>/` directory if it doesn't exist. If you're unsure what the feature slug should be, ask the user. This is the same feature directory that `to-tickets` will later populate with `issues/<NN>-<slug>.md`. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Write the spec using the template below, then publish it **as the tracker doc's "publish to the issue tracker" section describes** — that doc is the authority on where a spec lives and what shape it takes. Pick a short kebab-case feature slug to identify the work; if you're unsure what it should be, ask the user. Apply the `ready-for-agent` triage label - no need for additional triage.
+
+Whatever the tracker, the spec is the handle `to-tickets` hangs its tickets off later — so record where it landed.
 
 <spec-template>
 

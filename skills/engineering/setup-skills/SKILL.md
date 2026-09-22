@@ -51,14 +51,22 @@ Assume the user does not know what these terms mean. Each section starts with a 
 
 **Section A — Issue tracker.**
 
-> Explainer: The "issue tracker" is where issues and specs live for this repo. Skills like `to-tickets`, `to-spec`, and `wayfinder` read from and write to it. The default is local markdown files in a scratch directory. The skill discovers where that directory is (or should be) rather than forcing a fixed location.
+> Explainer: The "issue tracker" is where issues and specs live for this repo. Skills like `to-tickets`, `to-spec`, and `wayfinder` read from and write to it. There are two adapters. **Local markdown** needs nothing installed — issues are files, and blocking edges are prose you honour by hand. **Beads** (`bd`) is a CLI tracker with real dependency edges and a `bd ready` query that returns exactly the unblocked work, at the cost of requiring the `bd` binary.
 
-From your exploration, present what you found:
+Check which adapters are available before asking — run `bd --version` and look for a `.beads/` directory.
+
+Present what you found and propose accordingly:
+
+- **`.beads/` already exists** → propose beads. The repo is already using it.
+- **`bd` is on PATH but no `.beads/`** → offer both, noting beads needs `bd init --quiet` first.
+- **No `bd`** → propose local markdown. Mention beads exists as an option if they install it, but don't push.
+
+For **local markdown**, also confirm the **issue tracker root** path: one feature per directory under the root, specs and issues as markdown files inside.
 
 - If a scratch/issues directory already exists (e.g. `.scratch/`, `issues/`), propose using it. State the evidence: "I found `.scratch/` with existing feature directories — using this as the issue tracker root."
 - If none exists, propose `.scratch/` as a default and ask the user to confirm or name a different path.
 
-Confirm the **issue tracker root** path with the user. This is a local-markdown tracker: one feature per directory under the root, specs and issues as markdown files inside.
+For **beads**, there is no root path to confirm — the store is `.beads/`. Confirm instead that the repo is initialised, and tell the user to run `bd init --quiet` if it isn't.
 
 **Section B — Triage label vocabulary.**
 
@@ -126,7 +134,7 @@ layout.
 Then write the four docs files into `<discovered-docs-root>/agents/` using the seed templates in this skill folder as a starting point:
 
 - [project-structure.md](./project-structure.md) — the index: docs root location + links and one-line summaries pointing at the other three files
-- [issue-tracker-local.md](./issue-tracker-local.md) → write as `agents/issue-tracker.md` — local-markdown issue tracker (always use this one)
+- The issue tracker seed chosen in Section A → write as `agents/issue-tracker.md`. Use [issue-tracker-local.md](./issue-tracker-local.md) for local markdown, or [issue-tracker-beads.md](./issue-tracker-beads.md) for beads. Write exactly one of them.
 - [triage-labels.md](./triage-labels.md) → write as `agents/triage-labels.md` — label mapping
 - [domain.md](./domain.md) → write as `agents/domain.md` — domain doc consumer rules + layout
 
@@ -134,7 +142,7 @@ Then write the four docs files into `<discovered-docs-root>/agents/` using the s
 
 The `domain.md` you write must include concrete paths discovered during exploration, not generic placeholders. For example, if the repo has `documentation/CONTEXT.md` and `documentation/adr/`, those paths should appear explicitly.
 
-The `issue-tracker.md` you write must state the **discovered issue tracker root** as a concrete repo-relative path (e.g. `.scratch/`), not a hardcoded default. If no existing scratch directory was found, the path confirmed with the user in Section A is the one to record.
+If you wrote the **local-markdown** seed, the `issue-tracker.md` must state the **discovered issue tracker root** as a concrete repo-relative path (e.g. `.scratch/`), not a hardcoded default. If no existing scratch directory was found, the path confirmed with the user in Section A is the one to record. The **beads** seed has no root to fill in — its store is always `.beads/`.
 
 If no docs directory exists anywhere in the repo, ask the user where to create one — don't default to `docs/`.
 

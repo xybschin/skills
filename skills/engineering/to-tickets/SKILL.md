@@ -1,6 +1,6 @@
 ---
 name: to-tickets
-description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker — edges as text in a local file, or native blocking links on a real tracker.
+description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the repo's configured issue tracker.
 disable-model-invocation: true
 ---
 
@@ -57,10 +57,15 @@ Iterate until the user approves the breakdown.
 
 ### 5. Publish the tickets to the configured tracker
 
-Publish the approved tickets. **How** depends on the tracker `/setup-skills` configured — the tickets are the same either way, only the shape of the blocking edges changes:
+Publish the approved tickets **as the tracker doc's "publish to the issue tracker" section describes**. The tickets are the same whatever the tracker; only the shape of the blocking edges changes — text in a file, or native links on a real tracker.
 
-- **Local files** → write one `tickets.md` in the repo root, all tickets in dependency order (blockers first), each with its "Blocked by" listing the titles it depends on. Use the file template below.
-- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the `ready-for-agent` triage label unless instructed otherwise — the tickets are agent-grabbable by construction.
+Whatever the tracker:
+
+- Publish **in dependency order, blockers first**, so each ticket's blocking edges can reference real identifiers.
+- Use the tracker's **native** blocking relationship where it has one; otherwise record each ticket's "Blocked by" as text naming its blockers.
+- Apply the `ready-for-agent` triage label unless instructed otherwise — the tickets are agent-grabbable by construction.
+
+Use whichever template below the tracker doc calls for: `<tickets-file-template>` when tickets are markdown files, `<issue-template>` when each ticket is an issue.
 
 Do NOT close or modify any parent issue.
 

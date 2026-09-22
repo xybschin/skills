@@ -2,7 +2,7 @@
 
 A collection of agent skills, organised under `skills/` into engineering and productivity categories, plus opencode commands in `commands/`.
 
-Much of the engineering skill set is adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) — gratefully acknowledged. Local modifications include a local-markdown-only issue tracker and project-agnostic placement discovery in `setup-skills`.
+Much of the engineering skill set is adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) — gratefully acknowledged. Local modifications include two issue-tracker adapters — local markdown, or [beads](https://github.com/gastownhall/beads) (`bd`) for a real dependency graph — and project-agnostic placement discovery in `setup-skills`.
 
 ## Structure
 
