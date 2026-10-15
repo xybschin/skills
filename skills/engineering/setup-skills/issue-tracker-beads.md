@@ -10,7 +10,7 @@ There are no issue or spec files in the repo — `bd` is the store.
 ## Conventions
 
 - **Spec** (`/to-spec`) → one `epic` issue, body in `--description`, labelled `spec`.
-  No `SPEC.md` file, no feature directory.
+  No `spec.md` file, no feature directory.
 - **Ticket** (`/to-tickets`) → one issue per ticket with `--parent <epic-id>`, which gives
   it a hierarchical id (`bd-a3f8e9.1`, `.2`, …). Type is the author's call: `task`
   (the default) for most slices, `chore` for prefactors, `bug` for defects.
@@ -88,23 +88,7 @@ bd show <id> --json --include-dependents
 The user normally passes the id; if they pass a title, find it with `bd list --json`.
 `bd dep tree <id>` renders the graph; `bd blocked` lists what is stuck.
 
-## Frontier, claim, resolve
-
-The frontier is the open, unblocked, unclaimed work — what can be started right now.
-Used by `/implement` to take its next ticket, and by `/wayfinder` to walk a map.
-
-- **Frontier**: `bd ready --unassigned --json`. Scope it to one feature or map with
-  `--parent <epic-id>`, and to agent-grabbable work with `--label ready-for-agent`.
-  Add `--explain` to see why something is or isn't ready. An empty result means
-  everything is either done or blocked — `bd blocked` tells you which.
-- **Claim**: `bd update <id> --claim` before any work — one atomic write setting assignee
-  and `in_progress`, so a concurrent session cannot take the same ticket. To take the next
-  frontier ticket in a single step: `bd ready --parent <epic-id> --claim --json`.
-- **Close**: `bd close <id> --reason "<what landed>"`.
-- **Discovered work**: `bd create "<title>" --deps discovered-from:<current-id> ...` — a
-  non-blocking annotation recording where the work came from, so it doesn't gate anything.
-
-### Wayfinding operations
+## Wayfinding operations
 
 Used by `/wayfinder`. The **map** is an epic; its tickets are `--parent` children.
 
@@ -120,8 +104,12 @@ Used by `/wayfinder`. The **map** is an epic; its tickets are `--parent` childre
   the two mean different things.
 - **Blocking**: `bd dep add <blocked-id> <blocker-id>` — the native `blocks` edge, so the
   frontier renders in the tracker's own views.
-- **Frontier and claim**: as above, scoped with `--parent <map-id>`. Scoping by parent
-  also excludes the map epic itself.
+- **Frontier query**: `bd ready --parent <map-id> --unassigned --json`. Scoping by parent
+  also excludes the map epic itself. Add `--explain` to see why something is or isn't
+  ready; `bd blocked` lists what's waiting.
+- **Claim**: `bd update <id> --claim` before any work — one atomic write setting assignee
+  and `in_progress`, so a concurrent session cannot take the same ticket. To take the next
+  frontier ticket in a single step: `bd ready --parent <map-id> --claim --json`.
 - **Resolve**: `bd comments add <id> "<the answer>"`, then
   `bd close <id> --reason "<one-line gist>"`, then append a context pointer (ticket title,
   its id, and the gist) to the map's Decisions so far. Beads has no append-to-description,

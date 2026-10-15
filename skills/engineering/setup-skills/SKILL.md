@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Scaffold the per-repo configuration that the engineering skills assume:
 
-- **Issue tracker** — where issues and specs live (local markdown, discovered path)
+- **Issue tracker** — where issues and specs live (GitHub, GitLab, Azure DevOps, beads, or local markdown under `.scratch/`)
 - **Triage labels** — the strings used for the five canonical triage roles
 - **Domain docs** — where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them
 - **Project structure** — where the docs root lives, so other skills know where to read/write `agents/*.md` files
@@ -39,7 +39,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - Locate the repo's documentation directory. It may not be named `docs/` — look for common alternatives (`documentation/`, `doc/`, `wiki/`, etc.). Use whichever directory already serves as the documentation root.
 - Within the discovered docs directory, look for an ADR subdirectory (commonly `adr/`, but check for variants like `architecture-decisions/` or `decisions/`)
 - `<discovered-docs-root>/agents/` — does this skill's prior output already exist? In particular, check for `<discovered-docs-root>/agents/project-structure.md` from a prior run.
-- Existing scratch / issues directory — look for `.scratch/`, `issues/`, `tickets/`, or any directory already holding issue or spec files. Note its path.
+- `.scratch/` — a sign that a local-markdown issue tracker is already in use. Also note any other directory already holding issue or spec files (`issues/`, `tickets/`), since the local-markdown tracker only reads `.scratch/`.
 
 Use what you find to infer the layout — don't ask until you've looked.
 
@@ -51,28 +51,28 @@ Assume the user does not know what these terms mean. Each section starts with a 
 
 **Section A — Issue tracker.**
 
-> Explainer: The "issue tracker" is where issues and specs live for this repo. Skills like `to-tickets`, `to-spec`, and `wayfinder` read from and write to it. There are four adapters. **Local markdown** needs nothing installed — issues are files, and blocking edges are prose you honour by hand. **Beads** (`bd`) is a CLI tracker with real dependency edges and a `bd ready` query that returns exactly the unblocked work, at the cost of requiring the `bd` binary. **GitLab** uses `glab` against the repo's own GitLab issues/MRs. **Azure DevOps** uses `az boards` against Azure Boards work items, and is the right choice when a repo's issues live in Azure DevOps rather than beside the code.
+> Explainer: The "issue tracker" is where issues and specs live for this repo. Skills like `to-tickets`, `to-spec`, and `wayfinder` read from and write to it. There are five adapters. **GitHub** uses `gh` against the repo's own GitHub issues. **Local markdown** needs nothing installed — issues are files, and blocking edges are prose you honour by hand. **Beads** (`bd`) is a CLI tracker with real dependency edges and a `bd ready` query that returns exactly the unblocked work, at the cost of requiring the `bd` binary. **GitLab** uses `glab` against the repo's own GitLab issues/MRs. **Azure DevOps** uses `az boards` against Azure Boards work items, and is the right choice when a repo's issues live in Azure DevOps rather than beside the code.
 
 Check which adapters are available/applicable before asking:
 
 - Run `bd --version` and look for a `.beads/` directory, for beads.
-- Run `git remote -v` and check for a `gitlab.com` or self-hosted GitLab remote, for GitLab.
+- Run `git remote -v` and check for a `github.com` remote, for GitHub, or a `gitlab.com` or self-hosted GitLab remote, for GitLab.
 - Ask the user, or check for an existing `az devops configure --list` default, if the repo's issues live in Azure DevOps rather than on the code-hosting remote — Azure Boards isn't discoverable from `git remote -v` the way GitLab/GitHub are.
 
 Present what you found and propose accordingly:
 
 - **`.beads/` already exists** → propose beads. The repo is already using it.
 - **`bd` is on PATH but no `.beads/`** → offer it alongside other applicable options, noting beads needs `bd init --quiet` first.
+- **GitHub remote found** → propose GitHub.
 - **GitLab remote found** → propose GitLab.
 - **User confirms Azure Boards is where this repo's work items live** → propose Azure DevOps.
 - **None of the above** → propose local markdown as the no-install default. Mention the other adapters as options if applicable, but don't push.
 
-For **local markdown**, also confirm the **issue tracker root** path: one feature per directory under the root, specs and issues as markdown files inside.
-
-- If a scratch/issues directory already exists (e.g. `.scratch/`, `issues/`), propose using it. State the evidence: "I found `.scratch/` with existing feature directories — using this as the issue tracker root."
-- If none exists, propose `.scratch/` as a default and ask the user to confirm or name a different path.
+For **local markdown**, the root is always `.scratch/`: one feature per directory, specs and issues as markdown files inside. The installed skills (`to-tickets`, `code-review`) look there and nowhere else. If exploration found issue files in another directory (e.g. `issues/`), tell the user and offer to `git mv` them into `.scratch/`.
 
 For **beads**, there is no root path to confirm — the store is `.beads/`. Confirm instead that the repo is initialised, and tell the user to run `bd init --quiet` if it isn't.
+
+For **GitHub**, confirm `gh` is installed and authenticated (`gh auth status`). The seed's PRs-as-request-surface flag defaults to off; leave it off unless the user asks.
 
 For **GitLab**, confirm `glab` is installed and authenticated (`glab auth status`), and ask whether external merge requests should be treated as a triage surface (see the MRs-as-request-surface flag in the seed).
 
@@ -124,9 +124,11 @@ Let them edit before writing.
 
 **Pick the file to edit:**
 
-- Always create or edit `AGENTS.md` at the repo root
-- If `CLAUDE.md` exists, edit it in addition to `AGENTS.md` for backward compatibility
-- Never create duplicate `## Agent skills` blocks in multiple files
+- If `CLAUDE.md` exists, edit it.
+- Else if `AGENTS.md` exists, edit it.
+- If neither exists, ask the user which one to create; don't pick for them.
+
+Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa), and never write the `## Agent skills` block into both files.
 
 If an `## Agent skills` block already exists in the chosen file, update its contents in-place rather than appending a duplicate. Don't overwrite user edits to the surrounding sections.
 
@@ -146,7 +148,7 @@ layout.
 Then write the four docs files into `<discovered-docs-root>/agents/` using the seed templates in this skill folder as a starting point:
 
 - [project-structure.md](./project-structure.md) — the index: docs root location + links and one-line summaries pointing at the other three files
-- The issue tracker seed chosen in Section A → write as `agents/issue-tracker.md`. Use [issue-tracker-local.md](./issue-tracker-local.md) for local markdown, [issue-tracker-beads.md](./issue-tracker-beads.md) for beads, [issue-tracker-gitlab.md](./issue-tracker-gitlab.md) for GitLab, or [issue-tracker-azuredevops.md](./issue-tracker-azuredevops.md) for Azure DevOps. Write exactly one of them.
+- The issue tracker seed chosen in Section A → write as `agents/issue-tracker.md`. Use [issue-tracker-github.md](./issue-tracker-github.md) for GitHub, [issue-tracker-local.md](./issue-tracker-local.md) for local markdown, [issue-tracker-beads.md](./issue-tracker-beads.md) for beads, [issue-tracker-gitlab.md](./issue-tracker-gitlab.md) for GitLab, or [issue-tracker-azuredevops.md](./issue-tracker-azuredevops.md) for Azure DevOps. Write exactly one of them.
 - [triage-labels.md](./triage-labels.md) → write as `agents/triage-labels.md` — label mapping
 - [domain.md](./domain.md) → write as `agents/domain.md` — domain doc consumer rules + layout
 
@@ -154,10 +156,8 @@ Then write the four docs files into `<discovered-docs-root>/agents/` using the s
 
 The `domain.md` you write must include concrete paths discovered during exploration, not generic placeholders. For example, if the repo has `documentation/GLOSSARY.md` and `documentation/adr/`, those paths should appear explicitly.
 
-If you wrote the **local-markdown** seed, the `issue-tracker.md` must state the **discovered issue tracker root** as a concrete repo-relative path (e.g. `.scratch/`), not a hardcoded default. If no existing scratch directory was found, the path confirmed with the user in Section A is the one to record. The **beads** seed has no root to fill in — its store is always `.beads/`.
-
 If no docs directory exists anywhere in the repo, ask the user where to create one — don't default to `docs/`.
 
 ### 5. Done
 
-Tell the user the setup is complete and which engineering skills will now read from these files. Mention they can edit `<discovered-docs-root>/agents/*.md` directly later — re-running this skill is only necessary if they want to change the triage label vocabulary, domain doc layout, project structure, issue tracker root, or restart from scratch.
+Tell the user the setup is complete and which engineering skills will now read from these files. Mention they can edit `<discovered-docs-root>/agents/*.md` directly later — re-running this skill is only necessary if they want to change the triage label vocabulary, domain doc layout, project structure, issue tracker, or restart from scratch.

@@ -20,7 +20,7 @@ skills/
 |-------|---------|
 | **setup-skills** | Set up the agent skills block and repo config (issue tracker, labels, domain docs) |
 
-`setup-skills` replaces upstream's `setup-matt-pocock-skills`. It discovers the repo's docs root instead of assuming one, and ships issue-tracker adapters for local markdown, [beads](https://github.com/gastownhall/beads) (`bd`), GitLab (`glab`), and Azure DevOps (`az boards`). Run it in a repository before using the upstream engineering skills.
+`setup-skills` replaces upstream's `setup-matt-pocock-skills`. It discovers the repo's docs root instead of assuming one, and ships issue-tracker adapters for GitHub (`gh`), local markdown (`.scratch/`), [beads](https://github.com/gastownhall/beads) (`bd`), GitLab (`glab`), and Azure DevOps (`az boards`). Run it in a repository before using the upstream engineering skills.
 
 The upstream skills used with it:
 

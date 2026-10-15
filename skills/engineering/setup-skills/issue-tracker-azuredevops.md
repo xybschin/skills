@@ -110,25 +110,7 @@ The user normally passes the id; if they pass a title, find it with a WIQL query
 az boards query --wiql "SELECT [System.Id] FROM WorkItems WHERE [System.Title] CONTAINS '<title>'" -o json
 ```
 
-## Frontier, claim, resolve
-
-The frontier is the open, unblocked, unclaimed work — what can be started right now.
-Used by `/implement` to take its next ticket, and by `/wayfinder` to walk a map.
-
-- **Frontier**: a WIQL query for `State <> 'Closed' AND [System.AssignedTo] = ''` scoped to
-  the map's PBI, then drop any work item with an open Predecessor link (check via
-  `az boards work-item show --id <id> --expand relations -o json` and confirm each
-  Predecessor's state is `Closed`). First by id wins. An empty frontier means everything is
-  either done or blocked.
-- **Claim**: `az boards work-item update --id <id> --assigned-to <email> --state "In
-  Progress"` before any work — set both fields in the same call so no window exists where the
-  item looks assigned but still "To Do".
-- **Close**: `az boards work-item update --id <id> --state Closed --discussion "<what
-  landed>"`.
-- **Discovered work**: a new work item, with a `--discussion` note naming which ticket
-  surfaced it (Azure Boards has no native "discovered-from" link type; record it as text).
-
-### Wayfinding operations
+## Wayfinding operations
 
 Used by `/wayfinder`. The **map** is a PBI; its tickets are `Task`s linked to it as Parent.
 
@@ -143,8 +125,14 @@ Used by `/wayfinder`. The **map** is a PBI; its tickets are `Task`s linked to it
 - **Blocking**: `az boards work-item relation add --id <blocked-id> --relation-type
   "Predecessor" --target-id <blocker-id>` — the native dependency link, so the frontier can be
   computed from the tracker's own graph.
-- **Frontier and claim**: as above, scoped to `System.Parent = <map-id>`. Scoping by parent
-  also excludes the map PBI itself.
+- **Frontier query**: a WIQL query for `State <> 'Closed' AND [System.AssignedTo] = ''`
+  scoped to `System.Parent = <map-id>` (which also excludes the map PBI itself), then drop
+  any work item with an open Predecessor link (check via
+  `az boards work-item show --id <id> --expand relations -o json` and confirm each
+  Predecessor's state is `Closed`). First by id wins.
+- **Claim**: `az boards work-item update --id <id> --assigned-to <email> --state "In
+  Progress"` before any work — set both fields in the same call so no window exists where the
+  item looks assigned but still "To Do".
 - **Resolve**: `az boards work-item update --id <id> --discussion "<the answer>"`, then
   `--state Closed`, then append a context pointer (ticket title, its id, and the gist) to the
   map's Decisions-so-far. Azure Boards has no append-to-description API call, so that last step
