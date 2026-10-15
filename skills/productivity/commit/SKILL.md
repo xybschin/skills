@@ -1,6 +1,8 @@
 ---
 name: commit
 description: Generate conventional commit messages and create the actual commit. Analyzes staged changes (or all unstaged changes when nothing is staged, grouping them into logical commits). Use when user says "commit", "write a commit", "create commit", or "/commit".
+metadata:
+  opencode/slash: "true"
 ---
 
 # Commit Skill

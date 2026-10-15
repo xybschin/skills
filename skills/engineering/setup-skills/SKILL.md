@@ -2,6 +2,8 @@
 name: setup-skills
 description: Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `<docs-root>/agents/` so the engineering skills know this repo's issue tracker, triage label vocabulary, domain doc layout, and docs root location. Run before first use of `to-tickets`, `to-spec`, `wayfinder`, `domain-modeling`, or `improve-codebase-architecture` — or if those skills appear to be missing context about the issue tracker, triage labels, domain docs, or project structure.
 disable-model-invocation: true
+metadata:
+  opencode/slash: "true"
 ---
 
 # Setup Skills
