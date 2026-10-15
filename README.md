@@ -47,6 +47,33 @@ The skills in this repo need no wrapper: their `SKILL.md` sets `metadata: openco
 | `/triage` | Move incoming issues and external PRs through the triage roles and write agent-ready briefs; don't use it on tickets from /to-tickets |
 | `/wayfinder` | Plan work too big for one session as a shared map of investigation tickets on the tracker, resolving one at a time until the route is clear |
 
+### Installing the commands
+
+On Linux/macOS, link each `commands/*.md` into `~/.config/opencode/commands/` so the TUI picks them up:
+
+```bash
+mkdir -p ~/.config/opencode/commands
+for f in commands/*.md; do ln -sf "$(realpath "$f")" "$HOME/.config/opencode/commands/$(basename "$f")"; done
+```
+
+On Windows, use real file symlinks, not junctions (`New-Item -ItemType Junction` on a file target creates a broken reparse point):
+
+```powershell
+$dest = Join-Path $env:USERPROFILE '.config\opencode\commands'
+New-Item -ItemType Directory -Path $dest -Force | Out-Null
+Get-ChildItem commands\*.md | ForEach-Object {
+    New-Item -ItemType SymbolicLink -Path (Join-Path $dest $_.Name) -Target $_.FullName -Force
+}
+```
+
+If symlink creation is not allowed (no Developer Mode / admin), copy instead and re-run after updating the repo:
+
+```powershell
+Copy-Item commands\*.md (Join-Path $env:USERPROFILE '.config\opencode\commands') -Force
+```
+
+Restart opencode (or open a new TUI) for new commands to appear.
+
 ## Getting Started
 
 The upstream skills to install are listed in [`upstream-skills.txt`](./upstream-skills.txt). `setup-matt-pocock-skills` is left out on purpose — `setup-skills` from this repo replaces it.
