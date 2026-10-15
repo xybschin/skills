@@ -69,11 +69,19 @@ npx skills@latest add mattpocock/skills -g \
   $(grep -v '^#' upstream-skills.txt | sed 's/^/--skill /')
 ```
 
-Install the custom skills from this repo:
+In PowerShell:
+
+```powershell
+$skills = Get-Content upstream-skills.txt |
+  Where-Object { $_ -and -not $_.StartsWith('#') } |
+  ForEach-Object { '--skill', $_ }
+npx skills@latest add mattpocock/skills -g $skills
+```
+
+Install the custom skills from this repo (same command in bash and PowerShell):
 
 ```bash
-npx skills@latest add xybschin/skills -g \
-  --skill setup-skills --skill commit
+npx skills@latest add xybschin/skills -g --skill setup-skills --skill commit
 ```
 
 Add `-a <agent>` (e.g. `-a opencode`, `-a claude-code`) to skip the agent prompt, or drop `-g` to install into the current project instead of your user directory.
