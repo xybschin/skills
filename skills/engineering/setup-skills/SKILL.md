@@ -51,15 +51,21 @@ Assume the user does not know what these terms mean. Each section starts with a 
 
 **Section A — Issue tracker.**
 
-> Explainer: The "issue tracker" is where issues and specs live for this repo. Skills like `to-tickets`, `to-spec`, and `wayfinder` read from and write to it. There are two adapters. **Local markdown** needs nothing installed — issues are files, and blocking edges are prose you honour by hand. **Beads** (`bd`) is a CLI tracker with real dependency edges and a `bd ready` query that returns exactly the unblocked work, at the cost of requiring the `bd` binary.
+> Explainer: The "issue tracker" is where issues and specs live for this repo. Skills like `to-tickets`, `to-spec`, and `wayfinder` read from and write to it. There are four adapters. **Local markdown** needs nothing installed — issues are files, and blocking edges are prose you honour by hand. **Beads** (`bd`) is a CLI tracker with real dependency edges and a `bd ready` query that returns exactly the unblocked work, at the cost of requiring the `bd` binary. **GitLab** uses `glab` against the repo's own GitLab issues/MRs. **Azure DevOps** uses `az boards` against Azure Boards work items, and is the right choice when a repo's issues live in Azure DevOps rather than beside the code.
 
-Check which adapters are available before asking — run `bd --version` and look for a `.beads/` directory.
+Check which adapters are available/applicable before asking:
+
+- Run `bd --version` and look for a `.beads/` directory, for beads.
+- Run `git remote -v` and check for a `gitlab.com` or self-hosted GitLab remote, for GitLab.
+- Ask the user, or check for an existing `az devops configure --list` default, if the repo's issues live in Azure DevOps rather than on the code-hosting remote — Azure Boards isn't discoverable from `git remote -v` the way GitLab/GitHub are.
 
 Present what you found and propose accordingly:
 
 - **`.beads/` already exists** → propose beads. The repo is already using it.
-- **`bd` is on PATH but no `.beads/`** → offer both, noting beads needs `bd init --quiet` first.
-- **No `bd`** → propose local markdown. Mention beads exists as an option if they install it, but don't push.
+- **`bd` is on PATH but no `.beads/`** → offer it alongside other applicable options, noting beads needs `bd init --quiet` first.
+- **GitLab remote found** → propose GitLab.
+- **User confirms Azure Boards is where this repo's work items live** → propose Azure DevOps.
+- **None of the above** → propose local markdown as the no-install default. Mention the other adapters as options if applicable, but don't push.
 
 For **local markdown**, also confirm the **issue tracker root** path: one feature per directory under the root, specs and issues as markdown files inside.
 
@@ -67,6 +73,10 @@ For **local markdown**, also confirm the **issue tracker root** path: one featur
 - If none exists, propose `.scratch/` as a default and ask the user to confirm or name a different path.
 
 For **beads**, there is no root path to confirm — the store is `.beads/`. Confirm instead that the repo is initialised, and tell the user to run `bd init --quiet` if it isn't.
+
+For **GitLab**, confirm `glab` is installed and authenticated (`glab auth status`), and ask whether external merge requests should be treated as a triage surface (see the MRs-as-request-surface flag in the seed).
+
+For **Azure DevOps**, confirm `az` with the `azure-devops` extension is installed and `az devops configure --list` shows the right org/project default. Also confirm the process's hierarchy ceiling — if it has Epic/Feature above Product Backlog Item, note that the map/spec level should use those instead of PBI, and flag this as a deviation from the seed when writing `issue-tracker.md`.
 
 **Section B — Triage label vocabulary.**
 
@@ -136,7 +146,7 @@ layout.
 Then write the four docs files into `<discovered-docs-root>/agents/` using the seed templates in this skill folder as a starting point:
 
 - [project-structure.md](./project-structure.md) — the index: docs root location + links and one-line summaries pointing at the other three files
-- The issue tracker seed chosen in Section A → write as `agents/issue-tracker.md`. Use [issue-tracker-local.md](./issue-tracker-local.md) for local markdown, or [issue-tracker-beads.md](./issue-tracker-beads.md) for beads. Write exactly one of them.
+- The issue tracker seed chosen in Section A → write as `agents/issue-tracker.md`. Use [issue-tracker-local.md](./issue-tracker-local.md) for local markdown, [issue-tracker-beads.md](./issue-tracker-beads.md) for beads, [issue-tracker-gitlab.md](./issue-tracker-gitlab.md) for GitLab, or [issue-tracker-azuredevops.md](./issue-tracker-azuredevops.md) for Azure DevOps. Write exactly one of them.
 - [triage-labels.md](./triage-labels.md) → write as `agents/triage-labels.md` — label mapping
 - [domain.md](./domain.md) → write as `agents/domain.md` — domain doc consumer rules + layout
 
