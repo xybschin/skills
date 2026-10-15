@@ -15,7 +15,7 @@ lives under `<docs-root>/agents/`.
 
 ## Index
 
-- **Domain docs** — `<one-line summary: where CONTEXT.md and ADRs live>`.
+- **Domain docs** — `<one-line summary: where GLOSSARY.md and ADRs live>`.
   See [domain.md](./domain.md).
 - **Issue tracker** — `<one-line summary: which adapter, and where issues and specs live>`.
   See [issue-tracker.md](./issue-tracker.md).

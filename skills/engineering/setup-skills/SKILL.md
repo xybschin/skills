@@ -10,7 +10,7 @@ Scaffold the per-repo configuration that the engineering skills assume:
 
 - **Issue tracker** — where issues and specs live (local markdown, discovered path)
 - **Triage labels** — the strings used for the five canonical triage roles
-- **Domain docs** — where `CONTEXT.md` and ADRs live, and the consumer rules for reading them
+- **Domain docs** — where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them
 - **Project structure** — where the docs root lives, so other skills know where to read/write `agents/*.md` files
 
 This skill is **project-agnostic**: it never forces a structure. It explores the repo first to find where things already live, then confirms what it found with the user before writing anything. Every path below is *discovered*, not assumed.
@@ -35,7 +35,7 @@ missing this context, the repo either hasn't run `setup-skills` or its
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
 - `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Is there already an `## Agent skills` section in either?
-- `CONTEXT.md` and `CONTEXT-MAP.md` anywhere near the root
+- `GLOSSARY.md` and `GLOSSARY-MAP.md` anywhere near the root. Also look for the legacy names `CONTEXT.md` and `CONTEXT-MAP.md`: the skills no longer read them
 - Locate the repo's documentation directory. It may not be named `docs/` — look for common alternatives (`documentation/`, `doc/`, `wiki/`, etc.). Use whichever directory already serves as the documentation root.
 - Within the discovered docs directory, look for an ADR subdirectory (commonly `adr/`, but check for variants like `architecture-decisions/` or `decisions/`)
 - `<discovered-docs-root>/agents/` — does this skill's prior output already exist? In particular, check for `<discovered-docs-root>/agents/project-structure.md` from a prior run.
@@ -84,20 +84,22 @@ Default: each role's string equals its name. Ask the user if they want to overri
 
 **Section C — Domain docs.**
 
-> Explainer: Some skills (`improve-codebase-architecture`, `domain-modeling`, `grill-with-docs`) read a `CONTEXT.md` file to learn the project's domain language, and an ADR directory for past architectural decisions. The layout of these files determines where the skills look.
+> Explainer: Some skills (`improve-codebase-architecture`, `domain-modeling`, `grill-with-docs`) read a `GLOSSARY.md` file to learn the project's domain language, and an ADR directory for past architectural decisions. The layout of these files determines where the skills look.
 
 Infer the layout from your exploration in step 1:
 
-- A `CONTEXT.md` at the repo root (or wherever it currently lives)
+- A `GLOSSARY.md` at the repo root (or wherever it currently lives)
 - An ADR directory under the discovered docs root (commonly `adr/`, but check for variants like `architecture-decisions/` or `decisions/`)
+
+If exploration found a legacy `CONTEXT.md` or `CONTEXT-MAP.md`, offer to `git mv` it to `GLOSSARY.md` / `GLOSSARY-MAP.md` in the same directory. If the map file links to per-context `CONTEXT.md` files, rename those too and update the links. Record the new names in `domain.md`.
 
 Present what you found and the evidence behind it (e.g. "I found `documentation/` as the docs root and `documentation/adr/` for ADRs — using these for domain docs"). Ask the user to confirm or correct.
 
-If after exploring you genuinely cannot determine the layout — no `CONTEXT.md`, no docs directory, no obvious ADR location — ask the user directly:
+If after exploring you genuinely cannot determine the layout — no `GLOSSARY.md`, no docs directory, no obvious ADR location — ask the user directly:
 
-> I couldn't find an existing docs directory, `CONTEXT.md`, or ADR location. Where should domain context and ADRs live in this repo?
+> I couldn't find an existing docs directory, `GLOSSARY.md`, or ADR location. Where should domain context and ADRs live in this repo?
 
-In either case, the `<discovered-docs-root>/agents/domain.md` you write must reflect the actual discovered paths (e.g. `documentation/CONTEXT.md`, `documentation/adr/`), not generic placeholders.
+In either case, the `<discovered-docs-root>/agents/domain.md` you write must reflect the actual discovered paths (e.g. `documentation/GLOSSARY.md`, `documentation/adr/`), not generic placeholders.
 
 ### 3. Confirm and edit
 
@@ -140,7 +142,7 @@ Then write the four docs files into `<discovered-docs-root>/agents/` using the s
 
 `project-structure.md` must state the discovered docs root as a concrete repo-relative path (e.g. `documentation/`), and that `<docs-root>/agents/` is where this and other skills' shared config files live. It must link to the other three files by their **destination** names (`domain.md`, `issue-tracker.md`, `triage-labels.md`), each with a one-line summary so an agent reading only the index gets the gist. This file is the canonical pointer — `AGENTS.md` / `CLAUDE.md` points only here, and other skills read it first to locate the rest.
 
-The `domain.md` you write must include concrete paths discovered during exploration, not generic placeholders. For example, if the repo has `documentation/CONTEXT.md` and `documentation/adr/`, those paths should appear explicitly.
+The `domain.md` you write must include concrete paths discovered during exploration, not generic placeholders. For example, if the repo has `documentation/GLOSSARY.md` and `documentation/adr/`, those paths should appear explicitly.
 
 If you wrote the **local-markdown** seed, the `issue-tracker.md` must state the **discovered issue tracker root** as a concrete repo-relative path (e.g. `.scratch/`), not a hardcoded default. If no existing scratch directory was found, the path confirmed with the user in Section A is the one to record. The **beads** seed has no root to fill in — its store is always `.beads/`.
 
