@@ -2,13 +2,11 @@
 name: azure-item-tasks
 description: Mirror tickets from the repo's tracker as child Task work items on an Azure DevOps PBI.
 disable-model-invocation: true
-metadata:
-  opencode/slash: "true"
 ---
 
 # Azure Item Tasks
 
-Create child Tasks on a PBI from tickets that `/to-tickets` already published to the repo's tracker.
+Create child Tasks on a PBI from tickets that `@to-tickets` already published to the repo's tracker.
 
 ## Conventions
 
@@ -21,7 +19,7 @@ Create child Tasks on a PBI from tickets that `/to-tickets` already published to
 
 Take the PBI ID and the feature slug (or ticket references) from the user.
 
-When `issue-tracker.md` names **Azure DevOps**, stop: `/to-tickets` already published the tickets as Tasks under their parent. Report the existing children instead.
+When `issue-tracker.md` names **Azure DevOps**, stop: `@to-tickets` already published the tickets as Tasks under their parent. Report the existing children instead.
 
 ### 2. Read the tickets
 

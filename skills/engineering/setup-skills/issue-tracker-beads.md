@@ -9,9 +9,9 @@ There are no issue or spec files in the repo — `bd` is the store.
 
 ## Conventions
 
-- **Spec** (`/to-spec`) → one `epic` issue, body in `--description`, labelled `spec`.
+- **Spec** (`@to-spec`) → one `epic` issue, body in `--description`, labelled `spec`.
   No `spec.md` file, no feature directory.
-- **Ticket** (`/to-tickets`) → one issue per ticket with `--parent <epic-id>`, which gives
+- **Ticket** (`@to-tickets`) → one issue per ticket with `--parent <epic-id>`, which gives
   it a hierarchical id (`bd-a3f8e9.1`, `.2`, …). Type is the author's call: `task`
   (the default) for most slices, `chore` for prefactors, `bug` for defects.
 - **Blocking** → native edges. Only the `blocks` type gates readiness; `parent-child`
@@ -90,11 +90,11 @@ The user normally passes the id; if they pass a title, find it with `bd list --j
 
 ## Wayfinding operations
 
-Used by `/wayfinder`. The **map** is an epic; its tickets are `--parent` children.
+Used by `@wayfinder`. The **map** is an epic; its tickets are `--parent` children.
 
 - **Map**: `bd create "<effort name>" -t epic -l wayfinder:map -d "<Destination / Notes /
-  Decisions so far / Not yet specified / Out of scope body>"`. Both `/to-spec` and
-  `/wayfinder` mint epics, so the label — not the type — is what identifies a map.
+  Decisions so far / Not yet specified / Out of scope body>"`. Both `@to-spec` and
+  `@wayfinder` mint epics, so the label — not the type — is what identifies a map.
   Index them with `bd list --label-any wayfinder:map --json`.
 - **Child ticket**: `bd create "<question as title>" --parent <map-id>
   -l wayfinder:<type> --no-inherit-labels -d "## Question …"`, where `<type>` is

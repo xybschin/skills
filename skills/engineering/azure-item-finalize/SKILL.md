@@ -21,7 +21,7 @@ Fetch the work item via `mcp_azuredevops_m_wit_work_item` (action `get`, expand 
 
 - the branch with the changes is pushed to the remote
 - no PR is open for that branch (`mcp_azuredevops_m_repo_pull_request` list, filter by source branch)
-- the work item has child Tasks. Without any, tell the user `/azure-item-tasks` hasn't run, and ask whether to continue with step 3 skipped.
+- the work item has child Tasks. Without any, tell the user `@azure-item-tasks` hasn't run, and ask whether to continue with step 3 skipped.
 
 Present the plan: PR title/description/target, child tasks to close, summary text, and doc review comment (if any docs). Proceed on approval.
 

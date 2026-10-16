@@ -112,7 +112,7 @@ az boards query --wiql "SELECT [System.Id] FROM WorkItems WHERE [System.Title] C
 
 ## Wayfinding operations
 
-Used by `/wayfinder`. The **map** is a PBI; its tickets are `Task`s linked to it as Parent.
+Used by `@wayfinder`. The **map** is a PBI; its tickets are `Task`s linked to it as Parent.
 
 - **Map**: `az boards work-item create --type "Product Backlog Item" --title "<effort name>"
   --fields "System.Tags=wayfinder-map" --description "<Destination / Notes / Decisions so far

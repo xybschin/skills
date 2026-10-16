@@ -14,8 +14,8 @@ Issues and specs for this repo live as markdown files in `.scratch/`.
 
 Create the file under `.scratch/<feature-slug>/`, creating the directory if needed:
 
-- A **spec** (`/to-spec`) → `spec.md`.
-- A **ticket** (`/to-tickets`) → `issues/<NN>-<slug>.md`, numbered from `01` in dependency order so the numbering itself reflects blockers-first.
+- A **spec** (`@to-spec`) → `spec.md`.
+- A **ticket** (`@to-tickets`) → `issues/<NN>-<slug>.md`, numbered from `01` in dependency order so the numbering itself reflects blockers-first.
 
 There are no native blocking links here, so a ticket records its blockers as text: a `**Blocked by:**` line naming the titles it depends on, or "None — can start immediately".
 
@@ -25,7 +25,7 @@ Read the file at the referenced path. The user will normally pass the path or th
 
 ## Wayfinding operations
 
-Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.
+Used by `@wayfinder`. The **map** is a file with one **child** file per ticket.
 
 - **Map**: `.scratch/<effort>/map.md` — the Notes / Decisions-so-far / Fog body.
 - **Child ticket**: `.scratch/<effort>/issues/NN-<slug>.md`, numbered from `01`, with the question in the body. A `Type:` line records the ticket type (`research`/`prototype`/`grilling`/`task`); a `Status:` line records `claimed`/`resolved`.

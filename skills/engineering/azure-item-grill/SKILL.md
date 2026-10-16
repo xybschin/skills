@@ -1,11 +1,11 @@
 ---
 name: azure-item-grill
-description: Start from an assigned Azure DevOps PBI or Bug and grill the user on it, as the input for /to-spec and /to-tickets.
+description: Start from an assigned Azure DevOps PBI or Bug and grill the user on it, as the input for @to-spec and @to-tickets.
 ---
 
 # Grill Azure Item
 
-The PBI or Bug is the seed. This skill ends when the grill ends; `/to-spec` and `/to-tickets` run afterwards on the same conversation, and publish to the repo's configured tracker.
+The PBI or Bug is the seed. This skill ends when the grill ends; `@to-spec` and `@to-tickets` run afterwards on the same conversation, and publish to the repo's configured tracker.
 
 ## Conventions
 
@@ -20,7 +20,7 @@ Use the ID the user passed. Otherwise call `mcp_azuredevops_m_wit_work_item` (ac
 
 ### 2. Load context
 
-Fetch the item (`get`, expand `Relations`) for title, description, acceptance criteria, and existing children. Read `GLOSSARY.md` and the ADRs in the area the item touches, via `domain.md`. When the repo lacks the `agents/` config, tell the user to run `/setup-skills` and continue without it.
+Fetch the item (`get`, expand `Relations`) for title, description, acceptance criteria, and existing children. Read `GLOSSARY.md` and the ADRs in the area the item touches, via `domain.md`. When the repo lacks the `agents/` config, tell the user to run `@setup-skills` and continue without it.
 
 ### 3. Grill
 
@@ -50,8 +50,8 @@ No is the default for a Bug, or a PBI whose acceptance criteria already pin the 
 
 Report `Grill done for #<id> <title>. Spec: <yes/no>, <reason>.` followed by the next steps, in order:
 
-1. `/to-spec` (spec yes only)
-2. `/to-tickets` (tickets reference #<id> as parent)
-3. `/azure-item-tasks #<id> <feature-slug>` (skip when the tracker is Azure DevOps)
+1. `@to-spec` (spec yes only)
+2. `@to-tickets` (tickets reference #<id> as parent)
+3. `@azure-item-tasks #<id> <feature-slug>` (skip when the tracker is Azure DevOps)
 
 List the existing child Tasks found in step 2 so the tickets don't duplicate them.
