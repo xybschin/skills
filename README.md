@@ -19,6 +19,11 @@ skills/
 | Skill | Purpose |
 |-------|---------|
 | **setup-skills** | Set up the agent skills block and repo config (issue tracker, labels, domain docs) |
+| **azure-item-grill** | Grill the user on an assigned Azure DevOps PBI/Bug, and propose whether a spec is needed, before `/to-spec` and `/to-tickets` |
+| **azure-item-tasks** | Mirror tickets from the repo's tracker as child Tasks on the PBI (`/azure-item-tasks`) |
+| **azure-item-finalize** | Close out a PBI/Bug: create the PR, close child Tasks, summarize, link the PR, post doc review links |
+
+Azure flow: `azure-item-grill` → `/to-spec` (optional) → `/to-tickets` → `azure-item-tasks` → implement → `azure-item-finalize`. The Azure skills use the Azure DevOps MCP server.
 
 `setup-skills` replaces upstream's `setup-matt-pocock-skills`. It discovers the repo's docs root instead of assuming one, and ships issue-tracker adapters for GitHub (`gh`), local markdown (`.scratch/`), [beads](https://github.com/gastownhall/beads) (`bd`), GitLab (`glab`), and Azure DevOps (`az boards`). Run it in a repository before using the upstream engineering skills. For what those skills do, see [Matt's README](https://github.com/mattpocock/skills#readme).
 
@@ -108,7 +113,7 @@ npx skills@latest add mattpocock/skills -g $skills
 Install the custom skills from this repo (same command in bash and PowerShell):
 
 ```bash
-npx skills@latest add xybschin/skills -g --skill setup-skills --skill commit
+npx skills@latest add xybschin/skills -g --skill setup-skills --skill commit --skill azure-item-grill --skill azure-item-tasks --skill azure-item-finalize
 ```
 
 Add `-a <agent>` (e.g. `-a opencode`, `-a claude-code`) to skip the agent prompt, or drop `-g` to install into the current project instead of your user directory.
